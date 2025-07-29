@@ -117,9 +117,9 @@ function checkWinnerOrDraw() {
 <style scoped>
 .ttt-root {
   padding: 2.5rem 2rem 2.5rem 2rem;
-  background: #fff;
+  background: var(--color-background);
   border-radius: 1.25rem;
-  box-shadow: 0 2px 16px 0 rgb(30 42 80 / 7%);
+  box-shadow: 0 2px 16px 0 rgb(30 42 80 / 10%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -127,6 +127,7 @@ function checkWinnerOrDraw() {
   min-height: 420px;
   max-width: 340px;
   margin: 0 auto;
+  box-shadow: 0 2px 14px 0 #2e1a4717;
 }
 
 /* Status bar */
@@ -139,14 +140,16 @@ function checkWinnerOrDraw() {
   font-size: 1.08rem;
   font-weight: 600;
   letter-spacing: 0.01em;
-  color: var(--ttt-status-color, #444);
+  color: var(--color-primary);
   transition: color .3s;
 }
 .ttt-status.winner {
-  color: #4F46E5;
+  color: var(--color-accent);
+  text-shadow: 0 1px 0 #2222, 0 2px 4px #fff0;
 }
 .ttt-status.draw {
-  color: #F59E42;
+  color: var(--color-secondary);
+  text-shadow: 0 1px 0 #2221, 0 2px 3px #fff2;
 }
 
 /* Board styling */
@@ -159,6 +162,7 @@ function checkWinnerOrDraw() {
   pointer-events: auto;
   user-select: none;
   transition: opacity .24s;
+  border-radius: 1.25rem;
 }
 .ttt-board.ended {
   opacity: .64;
@@ -169,28 +173,31 @@ function checkWinnerOrDraw() {
 .ttt-cell {
   width: 64px;
   height: 64px;
-  background: #f8fafd;
+  background: var(--color-background-soft); /* Near white ADA bg */
   border-radius: 1rem;
-  border: 2.5px solid #f3f2ff;
+  border: 2.5px solid var(--color-border);
   font-size: 2.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: box-shadow 0.24s, border-color .18s;
-  box-shadow: 0 1px 6px #e4e9fa18;
+  transition: box-shadow 0.19s, border-color .16s, background .28s;
+  box-shadow: 0 1px 5px #2e1a470b;
   position: relative;
   outline: 0;
   will-change: filter;
+  color: var(--color-text-strong);
 }
 
 .ttt-cell.filled {
   cursor: default;
 }
 
-.ttt-cell:hover:not(.filled):not(.animated) {
-  border-color: #67C8FF;
-  box-shadow: 0 0 0 3px #67C8FF1a;
+.ttt-cell:hover:not(.filled):not(.animated),
+.ttt-cell:focus-visible:not(.filled) {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px #ffd6002b;
+  background: #fffde7;
 }
 
 .ttt-cell.animated {
@@ -205,28 +212,34 @@ function checkWinnerOrDraw() {
   100% { transform: scale(1); opacity: 1;}
 }
 
-/* Piece style */
+/* Piece style (accessibility: high contrast) */
 .ttt-piece {
   display: inline-block;
   font-family: 'Segoe UI Symbol','Arial',sans-serif;
-  font-size: 2.1rem;
-  font-weight: 800;
+  font-size: 2.08rem;
+  font-weight: 900;
   line-height: 1;
   pointer-events: none;
 }
+
 .is-king .ttt-piece {
-  background: linear-gradient(105deg, #4F46E5 60%, #67C8FF 100%);
+  /* Deep dark purple text, yellow highlight, ADA-contrasted */
+  background: linear-gradient(110deg, #2e1a47 82%, #ffd600 100%);
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  filter: drop-shadow(0 2.5px 0.5px #d9e6ff88);
+  filter: drop-shadow(0 1.5px 0.5px #ffd60033) drop-shadow(0 0.5px 0.1px #1111);
+  text-shadow: 0 0.5px 1.5px #fff8, 0 2px 4px #2222;
 }
+
 .is-queen .ttt-piece {
-  background: linear-gradient(120deg, #F59E42 55%, #67C8FF 100%);
+  /* Deep gold, ADA contrasted */
+  background: linear-gradient(100deg, #ffd600 64%, #2e1a47 100%);
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  filter: drop-shadow(0 2.5px 0.5px #ffeed688);
+  filter: drop-shadow(0 2px 1.5px #2e1a4744) drop-shadow(0 0.5px 0.1px #ffd60099);
+  text-shadow: 0 0.5px 1px #2224, 0 2.5px 8px #ffd60033;
 }
 
 /* Controls */
@@ -242,19 +255,32 @@ function checkWinnerOrDraw() {
   border: none;
   border-radius: .8em;
   font-size: 1rem;
-  font-weight: 500;
-  background: #4F46E5;
+  font-weight: 600;
+  background: var(--color-primary);
   color: #fff;
-  padding: 0.69em 1.68em;
-  box-shadow: 0 2px 8px 0 #4f47e524;
+  padding: 0.69em 1.7em;
+  box-shadow: 0 1.5px 6px 0 #2222;
   cursor: pointer;
   outline: none;
-  letter-spacing: 0.04em;
-  margin-top: 0.1em;
-  transition: background 0.18s, box-shadow .2s, color .22s;
+  letter-spacing: 0.06em;
+  margin-top: 0.18em;
+  border: 2px solid var(--color-accent);
+  transition: 
+    background-color .17s,
+    border .15s,
+    color .19s,
+    box-shadow .18s;
 }
 .ttt-btn:hover, .ttt-btn:focus {
-  background: #67C8FF;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border: 2.5px solid var(--color-primary);
+  box-shadow: 0 3px 12px 0 #ffd60030;
+}
+
+/* Focus ring for accessibility */
+.ttt-cell:focus-visible, .ttt-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }
 </style>
