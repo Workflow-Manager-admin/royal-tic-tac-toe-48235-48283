@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import RoyalTicTacToe from '../components/RoyalTicTacToe.vue'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
+  <main class="royal-tic-tac-toe-main">
+    <RoyalTicTacToe />
   </main>
 </template>
+
+<style scoped>
+.royal-tic-tac-toe-main {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
